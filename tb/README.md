@@ -7,6 +7,18 @@ three execution modes:
 - Execute preloaded programs on flash
 - Load no program and wait for OpenOCD to connect
 
+## APB event controller regression
+
+The self-checking `soc_event_generator_tb` regression verifies the FC mask,
+FIFO event ID, CPU interrupt 11 acknowledgment, and simultaneous-event behavior
+for events 7 and 8. Run it from the repository root with:
+
+```
+fusesoc --cores-root . run --target=event-generator-test --setup --build --run openhwgroup.org:systems:core-v-mcu
+```
+
+The simulation prints `TEST_PASS` and exits successfully when all checks pass.
+
 ## JTAG TAPs and Flash
 When running tests or developing programs, we normally use the first mode to do
 that. No special configuration is required to do that, just follow the PULP-SDK
