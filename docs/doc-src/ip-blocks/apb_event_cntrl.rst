@@ -299,25 +299,25 @@ APB event controller routes events to the following ouput channels:
 
 - **FC Channel (Fabric Controller / Core Complex):**
 
-FC Channel is responsible for communicating events to the Fabric Controller.
-The APB event controller has the following event notification paths:
+  FC Channel is responsible for communicating events to the Fabric Controller.
+  The APB event controller has the following event notification paths:
 
-  - Pin-based high-priority event notification: ``fc_events_o[1:0]`` directly mirrors
-    ``per_events_i[8:7]``. In CORE-V-MCU, this output is connected to the otherwise
-    unused ``s_fc_hp_events`` signal, so the direct notification path is not implemented.
-  - FIFO-based event notification: Unmasked events are accumulated in the FC FIFO,
-    and ``event_fifo_valid_o`` raises CPU interrupt 11. This path includes events 7 and 8.
+    - Pin-based high-priority event notification: ``fc_events_o[1:0]`` directly mirrors
+      ``per_events_i[8:7]``. In CORE-V-MCU, this output is connected to the otherwise
+      unused ``s_fc_hp_events`` signal, so the direct notification path is not implemented.
+    - FIFO-based event notification: Unmasked events are accumulated in the FC FIFO,
+      and ``event_fifo_valid_o`` raises CPU interrupt 11. This path includes events 7 and 8.
 
-Whenever a valid event is present for the FC channel, it is pushed onto the FC FIFO.
-The FC FIFO is a 4-entry queue that holds events until the CPU acknowledges interrupt 11.
-When an event is available in the FC FIFO, the APB event controller asserts
-``event_fifo_valid_o``, which drives CPU interrupt 11.
-When the CPU accepts interrupt 11, it acknowledges the interrupt by asserting
-``core_irq_ack_i`` with ``core_irq_ack_id_i`` set to 11.
-The event controller then copies the event ID at the head of the FIFO into the FIFO CSR
-and pops that entry.
-Software can read the captured event ID from the FIFO CSR in the interrupt service routine.
-The ``event_fifo_valid_o`` signal is deasserted once the FC FIFO is empty.
+  Whenever a valid event is present for the FC channel, it is pushed onto the FC FIFO.
+  The FC FIFO is a 4-entry queue that holds events until the CPU acknowledges interrupt 11.
+  When an event is available in the FC FIFO, the APB event controller asserts
+  ``event_fifo_valid_o``, which drives CPU interrupt 11.
+  When the CPU accepts interrupt 11, it acknowledges the interrupt by asserting
+  ``core_irq_ack_i`` with ``core_irq_ack_id_i`` set to 11.
+  The event controller then copies the event ID at the head of the FIFO into the FIFO CSR
+  and pops that entry.
+  Software can read the captured event ID from the FIFO CSR in the interrupt service routine.
+  The ``event_fifo_valid_o`` signal is deasserted once the FC FIFO is empty.
 
 - **CL Channel (Cluster / eFPGA):**
 
