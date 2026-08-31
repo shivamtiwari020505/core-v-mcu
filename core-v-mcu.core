@@ -11,6 +11,7 @@ filesets:
     depend:
     - pulp-platform.org::axi
     - pulp-platform.org::common_cells
+    - openhwgroup.org:ip:soc_event_generator
     - pulp-platform.org::riscv_dbg
     - pulp-platform.org::tech_cells_generic
     - pulp-platform.org::fpnew
@@ -53,9 +54,6 @@ filesets:
     - rtl/core-v-mcu/soc/periph_bus_wrap.sv
 #    - rtl/core-v-mcu/soc/soc_clk_rst_gen.sv
 #    - rtl/core-v-mcu/soc/clk_and_control.sv
-    - rtl/core-v-mcu/soc/soc_event_arbiter.sv
-    - rtl/core-v-mcu/soc/soc_event_generator.sv
-    - rtl/core-v-mcu/soc/soc_event_queue.sv
     - rtl/core-v-mcu/soc/tcdm_error_slave.sv
     - rtl/core-v-mcu/soc/soc_interconnect.sv
     - rtl/core-v-mcu/soc/soc_interconnect_wrap.sv
@@ -156,14 +154,6 @@ filesets:
     - tb/core_v_mcu_tb.sv
     - tb/uartdpi/uartdpi.sv
     - tb/qspi_model/GD25Q128B.v
-    file_type: systemVerilogSource
-  event-generator-test-rtl:
-    files:
-    - rtl/vendor/pulp_platform_common_cells/src/deprecated/generic_fifo.sv
-    - rtl/core-v-mcu/soc/soc_event_queue.sv
-    - rtl/core-v-mcu/soc/soc_event_arbiter.sv
-    - rtl/core-v-mcu/soc/soc_event_generator.sv
-    - tb/soc_event_generator_tb.sv
     file_type: systemVerilogSource
   nexys-rtl:
     files:
@@ -305,23 +295,6 @@ targets:
     tools:
       verilator:
         mode: lint-only
-        verilator_options:
-        - -Wno-fatal
-        - --timing
-
-  event-generator-test:
-    default_tool: verilator
-    filesets:
-    - event-generator-test-rtl
-    parameters:
-    - PULP_FPGA_EMUL=true
-    toplevel: [soc_event_generator_tb]
-    tools:
-      icarus:
-        iverilog_options:
-        - -g2012
-      verilator:
-        mode: binary
         verilator_options:
         - -Wno-fatal
         - --timing
